@@ -1,1 +1,163 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Rose Day Monika ❤️</title>
+    <style>
+        body {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; 
+            background: #1a0005; font-family: 'Poppins', sans-serif;
+            overflow: hidden; position: relative; color: #fff;
+        }
+
+        /* Deep Red Luxury Background */
+        .bg-gradient {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle, #4a0404 0%, #000000 100%);
+            z-index: -1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px);
+            padding: 40px; border-radius: 50px;
+            box-shadow: 0 0 80px rgba(255, 0, 60, 0.3); 
+            text-align: center; z-index: 10; width: 85%; max-width: 420px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); position: relative;
+        }
+
+        .rose-container {
+            font-size: 80px; margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #ff003c);
+            animation: bloom 3s infinite ease-in-out;
+        }
+        @keyframes bloom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 40px #ff4d6d); }
+        }
+
+        #yesBtn { 
+            background: linear-gradient(45deg, #ff003c, #800020); color: #fff; 
+            padding: 18px 45px; border: none; border-radius: 50px; 
+            font-weight: bold; cursor: pointer; font-size: 22px; 
+            box-shadow: 0 10px 30px rgba(255, 0, 60, 0.5); transition: 0.4s;
+            margin-top: 20px;
+        }
+
+        #noBtn { 
+            background: transparent; color: #666; border: 1px solid #333;
+            padding: 8px 15px; border-radius: 50px; cursor: pointer; margin-top: 25px;
+        }
+
+        /* Falling Petals */
+        .petal {
+            position: absolute; top: -50px; pointer-events: none;
+            z-index: 1; animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+        }
+
+        /* Floating Photos Gallery */
+        .float-img {
+            position: absolute; bottom: -200px; width: 110px; height: 140px;
+            object-fit: cover; border-radius: 15px; border: 2px solid rgba(255, 77, 109, 0.5);
+            z-index: 5; animation: floatUp 12s linear forwards;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        }
+        @keyframes floatUp { to { transform: translateY(-150vh) rotate(20deg); } }
+
+        #celebration { display: none; }
+        #typewriter { font-size: 19px; color: #ffb3c1; margin: 25px 0; font-weight: 500; line-height: 1.6; }
+        .tagline { font-size: 11px; color: #ff4d6d; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-gradient"></div>
+
+    <div class="card">
+        <div class="tagline">The Most Beautiful Flower</div>
+        
+        <div id="asking">
+            <div class="rose-container">🌹</div>
+            <h1 style="font-size: 28px; margin-bottom: 15px;">Monika...</h1>
+            <p style="font-size: 18px; color: #ffb3c1; line-height: 1.4; margin-bottom: 30px;">
+                Duniya ke har gulab ki apni kahani hai, <br>
+                Par tum meri poori prem kahaani ho. ❤️
+            </p>
+            <button id="yesBtn">Accept My Rose? 🌹</button>
+            <br>
+            <button id="noBtn">Maybe Next Time</button>
+        </div>
+
+        <div id="celebration">
+            <div class="rose-container">💐❤️🌹</div>
+            <div id="typewriter"></div>
+            <h2 style="color:#ff003c; animation: pulse 1s infinite; font-size: 24px;">Happy Rose Day, Monika!</h2>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const asking = document.getElementById('asking');
+        const celebration = document.getElementById('celebration');
+
+        // Falling Rose Petals Effect
+        function createPetal() {
+            const petal = document.createElement("div");
+            petal.className = "petal";
+            petal.innerHTML = "🌸"; // You can use 🌹 or 🌸
+            petal.style.left = Math.random() * 100 + "vw";
+            petal.style.fontSize = Math.random() * 20 + 10 + "px";
+            petal.style.opacity = Math.random();
+            petal.style.animationDuration = Math.random() * 3 + 4 + "s";
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 7000);
+        }
+        setInterval(createPetal, 300);
+
+        noBtn.onmouseover = () => {
+            noBtn.style.position = "absolute";
+            noBtn.style.left = Math.random() * 80 + "vw";
+            noBtn.style.top = Math.random() * 80 + "vh";
+        };
+
+        yesBtn.onclick = () => {
+            asking.style.display = "none";
+            celebration.style.display = "block";
+            startPhotoRain();
+            typeWriter();
+        };
+
+        function startPhotoRain() {
+            const photos = ['p1.jpeg','p2.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','p8.jpeg','p9.jpeg','p10.jpeg','p11.jpeg','p12.jpeg','p13.jpeg','p14.jpeg'];
+            setInterval(() => {
+                const img = document.createElement('img');
+                img.src = photos[Math.floor(Math.random() * photos.length)];
+                img.className = 'float-img';
+                img.style.left = Math.random() * 85 + 'vw';
+                document.body.appendChild(img);
+                setTimeout(() => img.remove(), 12000);
+            }, 1000);
+        }
+
+        function typeWriter() {
+            const text = "Monika, tum meri zindagi ka sabse khubsurat aur mehekta hua gulab ho. Har din tumhare saath ek tyohar jaisa hai. I love you so much! ❤️🌹";
+            let i = 0;
+            const container = document.getElementById('typewriter');
+            function play() {
+                if (i < text.length) {
+                    container.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(play, 60);
+                }
+            }
+            play();
+        }
+    </script>
+</body>
+</html>
