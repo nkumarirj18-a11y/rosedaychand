@@ -1,149 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rose Day Surprise for Monika 🌹</title>
-    <style>
-        body {
-            margin: 0; padding: 0; overflow: hidden;
-            background: radial-gradient(circle at center, #300, #000);
-            font-family: 'Poppins', sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; color: white;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rose Day Surprise 🌹</title>
 
-        /* The Interactive Rose Bud */
-        #rose-stage {
-            text-align: center; cursor: pointer; transition: 0.5s;
-        }
+<!-- preload photos -->
+<link rel="preload" as="image" href="p1.jpeg">
+<link rel="preload" as="image" href="p2.jpeg">
+<link rel="preload" as="image" href="p3.jpeg">
+<link rel="preload" as="image" href="p4.jpeg">
 
-        #the-rose {
-            font-size: 100px; transition: transform 0.3s ease;
-            filter: drop-shadow(0 0 20px #ff003c);
-        }
+<style>
+body{
+margin:0;
+overflow:hidden;
+font-family:Poppins, sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100dvh;
+color:white;
 
-        .instruction {
-            margin-top: 20px; font-style: italic; opacity: 0.7;
-            letter-spacing: 1px; animation: blink 1.5s infinite;
-        }
-        @keyframes blink { 50% { opacity: 0.2; } }
+background: radial-gradient(circle at center,#300,#000);
+background-size:200% 200%;
+animation:bgMove 8s ease infinite;
+}
 
-        /* Main Surprise Container (Hidden at start) */
-        #main-content {
-            display: none; text-align: center; width: 90%; max-width: 400px;
-            animation: fadeIn 2s ease-in-out forwards;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
 
-        .card {
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
-            padding: 30px; border-radius: 40px; border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 50px rgba(255, 0, 60, 0.3);
-        }
+/* rose stage */
+#rose-stage{text-align:center;cursor:pointer}
+#the-rose{
+font-size:100px;
+filter:drop-shadow(0 0 20px #ff003c);
+transition:0.3s;
+}
 
-        /* Floating Photos */
-        .float-img {
-            position: absolute; bottom: -150px; width: 90px; height: 120px;
-            object-fit: cover; border-radius: 12px; border: 2px solid #ff003c;
-            z-index: 5; animation: floatUp 10s linear forwards;
-        }
-        @keyframes floatUp { to { transform: translateY(-130vh) rotate(360deg); } }
+.instruction{
+margin-top:20px;
+opacity:.7;
+animation:blink 1.5s infinite;
+}
+@keyframes blink{50%{opacity:.2}}
 
-        /* Petals Explosion */
-        .petal {
-            position: absolute; pointer-events: none; z-index: 100;
-            animation: burst 2s ease-out forwards;
-        }
-        @keyframes burst {
-            0% { transform: translate(0,0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--x), var(--y)) rotate(360deg); opacity: 0; }
-        }
+@keyframes bloom{
+0%{transform:scale(1) rotate(0)}
+50%{transform:scale(1.3) rotate(10deg)}
+100%{transform:scale(1.2)}
+}
 
-        #typewriter { font-size: 18px; color: #ffb3c1; margin: 20px 0; line-height: 1.6; font-weight: bold; }
-    </style>
+/* main card */
+#main-content{display:none;text-align:center;width:90%;max-width:400px;animation:fadeIn 2s forwards}
+@keyframes fadeIn{from{opacity:0;transform:scale(.8)}to{opacity:1}}
+
+.card{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(15px);
+padding:30px;
+border-radius:40px;
+border:1px solid rgba(255,255,255,.1);
+box-shadow:0 0 50px rgba(255,0,60,.3);
+}
+
+@keyframes pulse{
+0%{box-shadow:0 0 30px rgba(255,0,60,.3)}
+50%{box-shadow:0 0 70px rgba(255,0,60,.8)}
+100%{box-shadow:0 0 30px rgba(255,0,60,.3)}
+}
+
+/* floating photos */
+.float-img{
+position:absolute;
+bottom:-150px;
+width:90px;height:120px;
+object-fit:cover;
+border-radius:12px;
+border:2px solid #ff003c;
+animation:floatUp 10s linear forwards;
+}
+@keyframes floatUp{to{transform:translateY(-130vh) rotate(360deg)}}
+
+/* petals */
+.petal{position:absolute;pointer-events:none;animation:burst 2s forwards}
+@keyframes burst{
+0%{transform:translate(0,0);opacity:1}
+100%{transform:translate(var(--x),var(--y)) rotate(360deg);opacity:0}
+}
+
+#typewriter{font-size:18px;color:#ffb3c1;margin:20px 0;font-weight:bold}
+
+/* mobile */
+@media(max-width:500px){
+#the-rose{font-size:80px}
+.float-img{width:70px;height:90px}
+}
+</style>
 </head>
+
 <body>
 
-    <div id="rose-stage" onclick="handleTap()">
-        <div id="the-rose">🌷</div>
-        <p class="instruction">Monika, tap to make it bloom... <br> (Tap <span id="tap-count">5</span> times)</p>
-    </div>
+<div id="rose-stage" onclick="handleTap()">
+<div id="the-rose">🌷</div>
+<p class="instruction">Tap to make it bloom (<span id="tap-count">5</span>)</p>
+</div>
 
-    <div id="main-content">
-        <div class="card">
-            <div style="font-size: 60px; margin-bottom: 10px;">🌹</div>
-            <h1 style="color: #ff003c; text-shadow: 0 0 10px #ff003c;">Happy Rose Day, Monika!</h1>
-            <div id="typewriter"></div>
-            <p style="font-style: italic; opacity: 0.8;">"Har gulab tumhare jaisa khoobsurat nahi hota..."</p>
-            <div style="font-size: 40px; margin-top: 15px;">❤️</div>
-        </div>
-    </div>
+<div id="main-content">
+<div class="card">
+<div style="font-size:60px">🌹</div>
+<h1 style="color:#ff003c">Happy Rose Day ❤️</h1>
+<div id="typewriter"></div>
+</div>
+</div>
 
-    <script>
-        let taps = 0;
-        const totalTaps = 5;
-        const roseElement = document.getElementById('the-rose');
-        const countDisplay = document.getElementById('tap-count');
+<script>
+let taps=0;
+const totalTaps=5;
+const rose=document.getElementById("the-rose");
+const count=document.getElementById("tap-count");
 
-        function handleTap() {
-            taps++;
-            countDisplay.innerText = totalTaps - taps;
-            
-            // Animation for each tap
-            roseElement.style.transform = `scale(${1 + taps * 0.2})`;
-            
-            if (taps === 2) roseElement.innerText = "🥀"; // Slight opening
-            if (taps === 4) roseElement.innerText = "🌹"; // Almost bloomed
+function handleTap(){
+taps++;
+count.innerText=totalTaps-taps;
 
-            if (taps >= totalTaps) {
-                document.getElementById('rose-stage').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                startCelebration();
-                typeWriter();
-            }
-        }
+/* vibration feedback */
+if(navigator.vibrate) navigator.vibrate(40);
 
-        function startCelebration() {
-            // Photos (p1 to p14)
-            const photos = ['p1.jpeg','p2.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','p8.jpeg','p9.jpeg','p10.jpeg', 'p11.jpeg', 'p12.jpeg', 'p13.jpeg', 'p14.jpeg'];
-            setInterval(() => {
-                const img = document.createElement('img');
-                img.src = photos[Math.floor(Math.random() * photos.length)];
-                img.className = 'float-img';
-                img.style.left = Math.random() * 80 + 'vw';
-                document.body.appendChild(img);
-                setTimeout(() => img.remove(), 10000);
-            }, 1200);
+/* glow pulse */
+rose.style.filter="drop-shadow(0 0 40px #ff003c)";
+setTimeout(()=>rose.style.filter="drop-shadow(0 0 20px #ff003c)",200);
 
-            // Explosion Particles
-            for(let i=0; i<60; i++) {
-                const p = document.createElement('div');
-                p.className = 'petal';
-                p.innerHTML = Math.random() > 0.5 ? '🌹' : '❤️';
-                p.style.left = '50vw'; p.style.top = '50vh';
-                const x = (Math.random() - 0.5) * 800;
-                const y = (Math.random() - 0.5) * 800;
-                p.style.setProperty('--x', `${x}px`);
-                p.style.setProperty('--y', `${y}px`);
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 2000);
-            }
-        }
+/* bloom animation */
+rose.style.animation="bloom .5s";
+setTimeout(()=>rose.style.animation="",500);
 
-        function typeWriter() {
-            const text = "Duniya ke har gulab ki apni kahani hai, Par tum meri poori prem kahani ho. Monika, tum meri zindagi ka sabse khoobsurat gulab ho! I love you! ❤️🌹";
-            let i = 0;
-            const container = document.getElementById('typewriter');
-            function play() {
-                if (i < text.length) {
-                    container.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(play, 60);
-                }
-            }
-            play();
-        }
-    </script>
+rose.style.transform=`scale(${1+taps*0.2})`;
+if(taps===2) rose.innerText="🥀";
+if(taps===4) rose.innerText="🌹";
+
+if(taps>=totalTaps){
+document.getElementById("rose-stage").style.display="none";
+document.getElementById("main-content").style.display="block";
+startCelebration();
+typeWriter();
+}
+}
+
+/* floating photos with auto stop */
+function startCelebration(){
+const photos=['p1.jpeg','p2.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','p8.jpeg','p9.jpeg','p10.jpeg','p11.jpeg','p12.jpeg','p13.jpeg','p14.jpeg'];
+
+function createPhoto(){
+const img=document.createElement("img");
+img.src=photos[Math.floor(Math.random()*photos.length)];
+img.className="float-img";
+img.style.left=Math.random()*80+"vw";
+document.body.appendChild(img);
+setTimeout(()=>img.remove(),10000);
+}
+
+const interval=setInterval(createPhoto,1200);
+setTimeout(()=>clearInterval(interval),25000);
+
+/* petals explosion */
+for(let i=0;i<60;i++){
+const p=document.createElement("div");
+p.className="petal";
+p.innerHTML=Math.random()>.5?'🌹':'❤️';
+p.style.left='50vw';
+p.style.top='50vh';
+p.style.setProperty('--x',(Math.random()-.5)*800+'px');
+p.style.setProperty('--y',(Math.random()-.5)*800+'px');
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),2000);
+}
+}
+
+/* typewriter + final heartbeat */
+function typeWriter(){
+const text="Duniya ke har gulab ki apni kahani hai, par tum meri poori prem kahani ho. I love you ❤️🌹";
+let i=0;
+const box=document.getElementById("typewriter");
+
+function play(){
+if(i<text.length){
+box.textContent+=text.charAt(i);
+i++;
+setTimeout(play,60);
+}else{
+document.querySelector(".card").style.animation="pulse 1.2s infinite";
+}
+}
+play();
+}
+</script>
 </body>
 </html>
