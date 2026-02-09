@@ -5,27 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rose Day 🌹</title>
 
-<!-- preload images -->
+<!-- preload photos -->
 <link rel="preload" as="image" href="p1.jpeg">
-<link rel="preload" as="image" href="p2.jpeg">
-<link rel="preload" as="image" href="p3.jpeg">
-<link rel="preload" as="image" href="p4.jpeg">
-<link rel="preload" as="image" href="p5.jpeg">
-<link rel="preload" as="image" href="p6.jpeg">
-<link rel="preload" as="image" href="p7.jpeg">
-<link rel="preload" as="image" href="p8.jpeg">
-<link rel="preload" as="image" href="p9.jpeg">
-<link rel="preload" as="image" href="p10.jpeg">
-<link rel="preload" as="image" href="p11.jpeg">
-<link rel="preload" as="image" href="p12.jpeg">
-<link rel="preload" as="image" href="p13.jpeg">
 <link rel="preload" as="image" href="p14.jpeg">
 
 <style>
 body{
-margin:0; overflow:hidden; font-family:Poppins,sans-serif;
-display:flex; justify-content:center; align-items:center;
-height:100dvh; color:white;
+margin:0;overflow:hidden;font-family:Poppins,sans-serif;
+display:flex;justify-content:center;align-items:center;
+height:100dvh;color:white;
 background: radial-gradient(circle,#300,#000);
 background-size:200% 200%;
 animation:bgMove 8s ease infinite;
@@ -36,30 +24,25 @@ animation:bgMove 8s ease infinite;
 100%{background-position:0% 50%;}
 }
 
-/* ROSE STAGE */
-#rose-stage{text-align:center;cursor:pointer}
-#the-rose{
-font-size:40px;
-transform:scale(.6);
-filter:drop-shadow(0 0 10px #ff003c);
-transition:.4s;
+/* FLASH */
+#flash{
+position:fixed;inset:0;background:white;opacity:0;pointer-events:none;
 }
 
+/* ROSE */
+#rose-stage{text-align:center;cursor:pointer}
+#the-rose{font-size:40px;transform:scale(.6);filter:drop-shadow(0 0 10px #ff003c);transition:.4s}
+
 @keyframes growRose{
-0%{transform:scale(.6) rotate(0)}
-50%{transform:scale(1.1) rotate(8deg)}
-100%{transform:scale(1)}
+0%{transform:scale(.6)}50%{transform:scale(1.1) rotate(8deg)}100%{transform:scale(1)}
 }
 @keyframes finalBloom{
-0%{transform:scale(1.4)}
-50%{transform:scale(2.2) rotate(15deg)}
-100%{transform:scale(1.8)}
+0%{transform:scale(1.4)}50%{transform:scale(2.2) rotate(15deg)}100%{transform:scale(1.8)}
 }
 
 .instruction{opacity:.7;margin-top:20px;animation:blink 1.5s infinite}
 @keyframes blink{50%{opacity:.2}}
 
-/* CARD */
 #main-content{display:none;text-align:center;width:90%;max-width:400px;animation:fadeIn 2s forwards}
 @keyframes fadeIn{from{opacity:0;transform:scale(.8)}to{opacity:1}}
 
@@ -70,38 +53,49 @@ padding:30px;border-radius:40px;
 border:1px solid rgba(255,255,255,.1);
 box-shadow:0 0 50px rgba(255,0,60,.3);
 }
+
 @keyframes pulse{
 0%{box-shadow:0 0 30px rgba(255,0,60,.3)}
-50%{box-shadow:0 0 70px rgba(255,0,60,.8)}
+50%{box-shadow:0 0 70px rgba(255,0,60,.9)}
 100%{box-shadow:0 0 30px rgba(255,0,60,.3)}
 }
 
-/* floating photos */
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(6px)}
+50%{transform:translateX(-6px)}
+75%{transform:translateX(6px)}
+100%{transform:translateX(0)}
+}
+
+/* PHOTOS */
 .float-img{
-position:absolute;bottom:-150px;
-width:90px;height:120px;object-fit:cover;
-border-radius:12px;border:2px solid #ff003c;
-animation:floatUp 10s linear forwards;
+position:absolute;bottom:-150px;width:90px;height:120px;
+object-fit:cover;border-radius:12px;border:2px solid #ff003c;
+opacity:0;
+animation:floatUp 10s linear forwards, photoFade 1s forwards;
 }
 @keyframes floatUp{to{transform:translateY(-130vh) rotate(360deg)}}
+@keyframes photoFade{to{opacity:1;transform:scale(1.1)}}
 
-/* petals blast */
+/* PETALS + CONFETTI */
 .petal{position:absolute;pointer-events:none;animation:burst 2s forwards}
 @keyframes burst{
 0%{transform:translate(0,0);opacity:1}
 100%{transform:translate(var(--x),var(--y)) rotate(360deg);opacity:0}
 }
 
-#typewriter{font-size:18px;color:#ffb3c1;margin:20px 0;font-weight:bold}
+.fallPetal{position:absolute;top:-50px;font-size:22px;animation:fall 6s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
 
-@media(max-width:500px){
-#the-rose{font-size:35px}
-.float-img{width:70px;height:90px}
-}
+#typewriter{font-size:18px;color:#ffb3c1;margin:20px 0;font-weight:bold}
 </style>
 </head>
 
 <body>
+
+<div id="flash"></div>
+<audio id="bgMusic" src="song.mp3" loop></audio>
 
 <div id="rose-stage" onclick="handleTap()">
 <div id="the-rose">🌱</div>
@@ -129,9 +123,7 @@ if(navigator.vibrate) navigator.vibrate(40);
 
 rose.style.animation="growRose .5s";
 setTimeout(()=>rose.style.animation="",500);
-
-const scale=0.6+(taps*0.25);
-rose.style.transform=`scale(${scale})`;
+rose.style.transform=`scale(${0.6+(taps*0.25)})`;
 
 if(taps==2) rose.innerText="🥀";
 if(taps==3) rose.innerText="🌷";
@@ -139,9 +131,21 @@ if(taps==4) rose.innerText="🌹";
 
 if(taps>=totalTaps){
 rose.style.animation="finalBloom 1s forwards";
+
+/* play music */
+document.getElementById("bgMusic").play().catch(()=>{});
+
+/* flash */
+const flash=document.getElementById("flash");
+flash.style.animation="flashAnim .8s";
+
+/* heart cursor */
+document.body.style.cursor="url('https://cur.cursors-4u.net/nature/nat-10/nat936.cur'), auto";
+
 setTimeout(()=>{
 document.getElementById("rose-stage").style.display="none";
 document.getElementById("main-content").style.display="block";
+document.querySelector(".card").style.animation="shake .4s 2";
 startCelebration();
 typeWriter();
 },900);
@@ -159,11 +163,10 @@ img.style.left=Math.random()*80+"vw";
 document.body.appendChild(img);
 setTimeout(()=>img.remove(),10000);
 }
-
 const interval=setInterval(createPhoto,1200);
 setTimeout(()=>clearInterval(interval),25000);
 
-/* BIG BLAST */
+/* mega blast */
 for(let i=0;i<120;i++){
 const p=document.createElement("div");
 p.className="petal";
@@ -174,6 +177,29 @@ p.style.setProperty('--y',(Math.random()-.5)*1200+'px');
 document.body.appendChild(p);
 setTimeout(()=>p.remove(),2000);
 }
+
+/* falling petals rain */
+setInterval(()=>{
+const p=document.createElement("div");
+p.className="fallPetal";
+p.innerHTML="🌸";
+p.style.left=Math.random()*100+"vw";
+document.body.appendChild(p);
+setTimeout(()=>p.remove(),6000);
+},400);
+
+/* confetti hearts */
+setTimeout(()=>{
+for(let i=0;i<80;i++){
+const c=document.createElement("div");
+c.className="fallPetal";
+c.innerHTML="❤️";
+c.style.fontSize="18px";
+c.style.left=Math.random()*100+"vw";
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),6000);
+}
+},5000);
 }
 
 function typeWriter(){
