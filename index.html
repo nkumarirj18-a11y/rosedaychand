@@ -3,155 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rose Day Surprise | Monika ❤️</title>
+    <title>Rose Day Surprise for Monika 🌹</title>
     <style>
-        :root {
-            --gold: #ffd700;
-            --deep-red: #4b0404;
-            --bright-red: #ff003c;
-        }
-
         body {
-            margin: 0; padding: 0;
-            background: radial-gradient(circle at center, #2b0000 0%, #000000 100%);
-            font-family: 'Georgia', serif;
-            height: 100vh; overflow: hidden;
+            margin: 0; padding: 0; overflow: hidden;
+            background: radial-gradient(circle at center, #300, #000);
+            font-family: 'Poppins', sans-serif;
             display: flex; justify-content: center; align-items: center;
-            perspective: 1000px;
+            height: 100vh; color: white;
         }
 
-        /* Sparkle Background */
-        .sparkles {
-            position: absolute; width: 100%; height: 100%;
-            background-image: radial-gradient(white, rgba(255,255,255,0) 2px);
-            background-size: 50px 50px; opacity: 0.2;
-            animation: sparkleMove 10s linear infinite;
-        }
-        @keyframes sparkleMove { from { background-position: 0 0; } to { background-position: 500px 1000px; } }
-
-        /* The Golden Glowing Frame like in the Image */
-        .main-frame {
-            position: relative;
-            width: 350px; padding: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 3px solid var(--gold);
-            border-radius: 40px;
-            text-align: center;
-            box-shadow: 0 0 30px var(--gold), inset 0 0 20px rgba(212, 175, 55, 0.5);
-            z-index: 10; animation: frameFloat 4s ease-in-out infinite;
-        }
-        @keyframes frameFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .title {
-            color: var(--gold); font-size: 32px; margin-bottom: 10px;
-            text-shadow: 0 0 10px var(--gold);
+        /* The Interactive Rose Bud */
+        #rose-stage {
+            text-align: center; cursor: pointer; transition: 0.5s;
         }
 
-        .poetry {
-            color: #fff; font-size: 18px; line-height: 1.6;
-            margin: 20px 0; font-style: italic;
+        #the-rose {
+            font-size: 100px; transition: transform 0.3s ease;
+            filter: drop-shadow(0 0 20px #ff003c);
         }
 
-        #yesBtn {
-            background: linear-gradient(to right, var(--gold), #b8860b);
-            color: #000; border: none; padding: 12px 30px;
-            border-radius: 25px; font-weight: bold; font-size: 18px;
-            cursor: pointer; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-            transition: 0.3s;
+        .instruction {
+            margin-top: 20px; font-style: italic; opacity: 0.7;
+            letter-spacing: 1px; animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0.2; } }
+
+        /* Main Surprise Container (Hidden at start) */
+        #main-content {
+            display: none; text-align: center; width: 90%; max-width: 400px;
+            animation: fadeIn 2s ease-in-out forwards;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+            padding: 30px; border-radius: 40px; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 50px rgba(255, 0, 60, 0.3);
         }
 
-        /* Floating Polaroids (p1 to p14) */
-        .polaroid {
-            position: absolute; width: 80px; height: 100px;
-            background: #fff; padding: 5px; padding-bottom: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            border-radius: 5px; z-index: 5;
-            animation: floatPolaroid 15s linear infinite;
+        /* Floating Photos */
+        .float-img {
+            position: absolute; bottom: -150px; width: 90px; height: 120px;
+            object-fit: cover; border-radius: 12px; border: 2px solid #ff003c;
+            z-index: 5; animation: floatUp 10s linear forwards;
         }
-        .polaroid img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes floatUp { to { transform: translateY(-130vh) rotate(360deg); } }
 
-        @keyframes floatPolaroid {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Red Rose Petals Rain */
+        /* Petals Explosion */
         .petal {
-            position: absolute; top: -50px; color: #ff003c;
-            font-size: 25px; pointer-events: none;
-            animation: petalFall 7s linear forwards;
+            position: absolute; pointer-events: none; z-index: 100;
+            animation: burst 2s ease-out forwards;
         }
-        @keyframes petalFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+        @keyframes burst {
+            0% { transform: translate(0,0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) rotate(360deg); opacity: 0; }
+        }
 
-        #celebration { display: none; }
+        #typewriter { font-size: 18px; color: #ffb3c1; margin: 20px 0; line-height: 1.6; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="sparkles"></div>
+    <div id="rose-stage" onclick="handleTap()">
+        <div id="the-rose">🌷</div>
+        <p class="instruction">Monika, tap to make it bloom... <br> (Tap <span id="tap-count">5</span> times)</p>
+    </div>
 
-    <div class="main-frame" id="content-box">
-        <div id="asking">
-            <div style="font-size: 50px;">🌹</div>
-            <div class="title">Happy Rose Day, <br> Monika ❤️</div>
-            <div class="poetry">
-                "Har Gulab ki apni kahani hai,<br>
-                Par Tum meri poori Prem Kahaani ho."
-            </div>
-            <button id="yesBtn">Accept My Love? ✨</button>
-        </div>
-
-        <div id="celebration">
-            <div style="font-size: 60px;">💐</div>
-            <h2 style="color: var(--gold);">Infinite Love Locked!</h2>
-            <p style="color: #ffb3c1;">Monika, tum meri zindagi ka sabse khoobsurat gulab ho. I love you!</p>
+    <div id="main-content">
+        <div class="card">
+            <div style="font-size: 60px; margin-bottom: 10px;">🌹</div>
+            <h1 style="color: #ff003c; text-shadow: 0 0 10px #ff003c;">Happy Rose Day, Monika!</h1>
+            <div id="typewriter"></div>
+            <p style="font-style: italic; opacity: 0.8;">"Har gulab tumhare jaisa khoobsurat nahi hota..."</p>
+            <div style="font-size: 40px; margin-top: 15px;">❤️</div>
         </div>
     </div>
 
     <script>
-        // Particle & Photo Logic
-        const photos = ['p1.jpeg','p2.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','p8.jpeg','p9.jpeg','p10.jpeg','p11.jpeg','p12.jpeg','p13.jpeg','p14.jpeg'];
-        
-        // Spawn Floating Photos (Polaroid Style)
-        function spawnPolaroid() {
-            const p = document.createElement('div');
-            p.className = 'polaroid';
-            const img = document.createElement('img');
-            img.src = photos[Math.floor(Math.random() * photos.length)];
-            p.appendChild(img);
-            
-            p.style.left = Math.random() * 90 + 'vw';
-            p.style.animationDuration = (Math.random() * 5 + 10) + 's';
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 15000);
-        }
-        setInterval(spawnPolaroid, 2000);
+        let taps = 0;
+        const totalTaps = 5;
+        const roseElement = document.getElementById('the-rose');
+        const countDisplay = document.getElementById('tap-count');
 
-        // Falling Petals
-        function spawnPetal() {
-            const petal = document.createElement('div');
-            petal.className = 'petal';
-            petal.innerHTML = '🌹';
-            petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.animationDuration = (Math.random() * 3 + 5) + 's';
-            document.body.appendChild(petal);
-            setTimeout(() => petal.remove(), 7000);
-        }
-        setInterval(spawnPetal, 400);
-
-        // Interaction
-        document.getElementById('yesBtn').onclick = function() {
-            document.getElementById('asking').style.display = 'none';
-            document.getElementById('celebration').style.display = 'block';
+        function handleTap() {
+            taps++;
+            countDisplay.innerText = totalTaps - taps;
             
-            // Burst Explosion
-            for(let i=0; i<50; i++) {
-                spawnPetal();
+            // Animation for each tap
+            roseElement.style.transform = `scale(${1 + taps * 0.2})`;
+            
+            if (taps === 2) roseElement.innerText = "🥀"; // Slight opening
+            if (taps === 4) roseElement.innerText = "🌹"; // Almost bloomed
+
+            if (taps >= totalTaps) {
+                document.getElementById('rose-stage').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                startCelebration();
+                typeWriter();
             }
-        };
+        }
+
+        function startCelebration() {
+            // Photos (p1 to p14)
+            const photos = ['p1.jpeg','p2.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','p8.jpeg','p9.jpeg','p10.jpeg', 'p11.jpeg', 'p12.jpeg', 'p13.jpeg', 'p14.jpeg'];
+            setInterval(() => {
+                const img = document.createElement('img');
+                img.src = photos[Math.floor(Math.random() * photos.length)];
+                img.className = 'float-img';
+                img.style.left = Math.random() * 80 + 'vw';
+                document.body.appendChild(img);
+                setTimeout(() => img.remove(), 10000);
+            }, 1200);
+
+            // Explosion Particles
+            for(let i=0; i<60; i++) {
+                const p = document.createElement('div');
+                p.className = 'petal';
+                p.innerHTML = Math.random() > 0.5 ? '🌹' : '❤️';
+                p.style.left = '50vw'; p.style.top = '50vh';
+                const x = (Math.random() - 0.5) * 800;
+                const y = (Math.random() - 0.5) * 800;
+                p.style.setProperty('--x', `${x}px`);
+                p.style.setProperty('--y', `${y}px`);
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 2000);
+            }
+        }
+
+        function typeWriter() {
+            const text = "Duniya ke har gulab ki apni kahani hai, Par tum meri poori prem kahani ho. Monika, tum meri zindagi ka sabse khoobsurat gulab ho! I love you! ❤️🌹";
+            let i = 0;
+            const container = document.getElementById('typewriter');
+            function play() {
+                if (i < text.length) {
+                    container.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(play, 60);
+                }
+            }
+            play();
+        }
     </script>
 </body>
 </html>
