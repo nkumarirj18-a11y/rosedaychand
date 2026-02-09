@@ -3,70 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rose Day Surprise 🌹</title>
+<title>Rose Day 🌹</title>
 
-<!-- preload photos -->
+<!-- preload images -->
 <link rel="preload" as="image" href="p1.jpeg">
 <link rel="preload" as="image" href="p2.jpeg">
 <link rel="preload" as="image" href="p3.jpeg">
 <link rel="preload" as="image" href="p4.jpeg">
+<link rel="preload" as="image" href="p5.jpeg">
+<link rel="preload" as="image" href="p6.jpeg">
+<link rel="preload" as="image" href="p7.jpeg">
+<link rel="preload" as="image" href="p8.jpeg">
+<link rel="preload" as="image" href="p9.jpeg">
+<link rel="preload" as="image" href="p10.jpeg">
+<link rel="preload" as="image" href="p11.jpeg">
+<link rel="preload" as="image" href="p12.jpeg">
+<link rel="preload" as="image" href="p13.jpeg">
+<link rel="preload" as="image" href="p14.jpeg">
 
 <style>
 body{
-margin:0;
-overflow:hidden;
-font-family:Poppins, sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100dvh;
-color:white;
-
-background: radial-gradient(circle at center,#300,#000);
+margin:0; overflow:hidden; font-family:Poppins,sans-serif;
+display:flex; justify-content:center; align-items:center;
+height:100dvh; color:white;
+background: radial-gradient(circle,#300,#000);
 background-size:200% 200%;
 animation:bgMove 8s ease infinite;
 }
-
 @keyframes bgMove{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
 }
 
-/* rose stage */
+/* ROSE STAGE */
 #rose-stage{text-align:center;cursor:pointer}
 #the-rose{
-font-size:100px;
-filter:drop-shadow(0 0 20px #ff003c);
-transition:0.3s;
+font-size:40px;
+transform:scale(.6);
+filter:drop-shadow(0 0 10px #ff003c);
+transition:.4s;
 }
 
-.instruction{
-margin-top:20px;
-opacity:.7;
-animation:blink 1.5s infinite;
+@keyframes growRose{
+0%{transform:scale(.6) rotate(0)}
+50%{transform:scale(1.1) rotate(8deg)}
+100%{transform:scale(1)}
 }
+@keyframes finalBloom{
+0%{transform:scale(1.4)}
+50%{transform:scale(2.2) rotate(15deg)}
+100%{transform:scale(1.8)}
+}
+
+.instruction{opacity:.7;margin-top:20px;animation:blink 1.5s infinite}
 @keyframes blink{50%{opacity:.2}}
 
-@keyframes bloom{
-0%{transform:scale(1) rotate(0)}
-50%{transform:scale(1.3) rotate(10deg)}
-100%{transform:scale(1.2)}
-}
-
-/* main card */
+/* CARD */
 #main-content{display:none;text-align:center;width:90%;max-width:400px;animation:fadeIn 2s forwards}
 @keyframes fadeIn{from{opacity:0;transform:scale(.8)}to{opacity:1}}
 
 .card{
 background:rgba(255,255,255,.05);
 backdrop-filter:blur(15px);
-padding:30px;
-border-radius:40px;
+padding:30px;border-radius:40px;
 border:1px solid rgba(255,255,255,.1);
 box-shadow:0 0 50px rgba(255,0,60,.3);
 }
-
 @keyframes pulse{
 0%{box-shadow:0 0 30px rgba(255,0,60,.3)}
 50%{box-shadow:0 0 70px rgba(255,0,60,.8)}
@@ -75,17 +78,14 @@ box-shadow:0 0 50px rgba(255,0,60,.3);
 
 /* floating photos */
 .float-img{
-position:absolute;
-bottom:-150px;
-width:90px;height:120px;
-object-fit:cover;
-border-radius:12px;
-border:2px solid #ff003c;
+position:absolute;bottom:-150px;
+width:90px;height:120px;object-fit:cover;
+border-radius:12px;border:2px solid #ff003c;
 animation:floatUp 10s linear forwards;
 }
 @keyframes floatUp{to{transform:translateY(-130vh) rotate(360deg)}}
 
-/* petals */
+/* petals blast */
 .petal{position:absolute;pointer-events:none;animation:burst 2s forwards}
 @keyframes burst{
 0%{transform:translate(0,0);opacity:1}
@@ -94,9 +94,8 @@ animation:floatUp 10s linear forwards;
 
 #typewriter{font-size:18px;color:#ffb3c1;margin:20px 0;font-weight:bold}
 
-/* mobile */
 @media(max-width:500px){
-#the-rose{font-size:80px}
+#the-rose{font-size:35px}
 .float-img{width:70px;height:90px}
 }
 </style>
@@ -105,8 +104,8 @@ animation:floatUp 10s linear forwards;
 <body>
 
 <div id="rose-stage" onclick="handleTap()">
-<div id="the-rose">🌷</div>
-<p class="instruction">Tap to make it bloom (<span id="tap-count">5</span>)</p>
+<div id="the-rose">🌱</div>
+<p class="instruction">Tap to grow the rose (<span id="tap-count">5</span>)</p>
 </div>
 
 <div id="main-content">
@@ -126,31 +125,29 @@ const count=document.getElementById("tap-count");
 function handleTap(){
 taps++;
 count.innerText=totalTaps-taps;
-
-/* vibration feedback */
 if(navigator.vibrate) navigator.vibrate(40);
 
-/* glow pulse */
-rose.style.filter="drop-shadow(0 0 40px #ff003c)";
-setTimeout(()=>rose.style.filter="drop-shadow(0 0 20px #ff003c)",200);
-
-/* bloom animation */
-rose.style.animation="bloom .5s";
+rose.style.animation="growRose .5s";
 setTimeout(()=>rose.style.animation="",500);
 
-rose.style.transform=`scale(${1+taps*0.2})`;
-if(taps===2) rose.innerText="🥀";
-if(taps===4) rose.innerText="🌹";
+const scale=0.6+(taps*0.25);
+rose.style.transform=`scale(${scale})`;
+
+if(taps==2) rose.innerText="🥀";
+if(taps==3) rose.innerText="🌷";
+if(taps==4) rose.innerText="🌹";
 
 if(taps>=totalTaps){
+rose.style.animation="finalBloom 1s forwards";
+setTimeout(()=>{
 document.getElementById("rose-stage").style.display="none";
 document.getElementById("main-content").style.display="block";
 startCelebration();
 typeWriter();
+},900);
 }
 }
 
-/* floating photos with auto stop */
 function startCelebration(){
 const photos=['p1.jpeg','p2.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','p8.jpeg','p9.jpeg','p10.jpeg','p11.jpeg','p12.jpeg','p13.jpeg','p14.jpeg'];
 
@@ -166,21 +163,19 @@ setTimeout(()=>img.remove(),10000);
 const interval=setInterval(createPhoto,1200);
 setTimeout(()=>clearInterval(interval),25000);
 
-/* petals explosion */
-for(let i=0;i<60;i++){
+/* BIG BLAST */
+for(let i=0;i<120;i++){
 const p=document.createElement("div");
 p.className="petal";
 p.innerHTML=Math.random()>.5?'🌹':'❤️';
-p.style.left='50vw';
-p.style.top='50vh';
-p.style.setProperty('--x',(Math.random()-.5)*800+'px');
-p.style.setProperty('--y',(Math.random()-.5)*800+'px');
+p.style.left='50vw';p.style.top='50vh';
+p.style.setProperty('--x',(Math.random()-.5)*1200+'px');
+p.style.setProperty('--y',(Math.random()-.5)*1200+'px');
 document.body.appendChild(p);
 setTimeout(()=>p.remove(),2000);
 }
 }
 
-/* typewriter + final heartbeat */
 function typeWriter(){
 const text="Duniya ke har gulab ki apni kahani hai, par tum meri poori prem kahani ho. I love you ❤️🌹";
 let i=0;
@@ -198,5 +193,6 @@ document.querySelector(".card").style.animation="pulse 1.2s infinite";
 play();
 }
 </script>
+
 </body>
 </html>
