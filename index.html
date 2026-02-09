@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rose Day 🌹</title>
 
-<!-- preload photos -->
-<link rel="preload" as="image" href="p1.jpeg">
-<link rel="preload" as="image" href="p14.jpeg">
-
 <style>
 body{
 margin:0;overflow:hidden;font-family:Poppins,sans-serif;
@@ -24,22 +20,21 @@ animation:bgMove 8s ease infinite;
 100%{background-position:0% 50%;}
 }
 
-/* FLASH */
-#flash{
-position:fixed;inset:0;background:white;opacity:0;pointer-events:none;
-}
+#flash{position:fixed;inset:0;background:white;opacity:0;pointer-events:none}
 
-/* ROSE */
 #rose-stage{text-align:center;cursor:pointer}
-#the-rose{font-size:40px;transform:scale(.6);filter:drop-shadow(0 0 10px #ff003c);transition:.4s}
-
+#the-rose{
+font-size:55px;
+transform:scale(.7);
+filter:drop-shadow(0 0 10px #ff003c);
+transition:.4s;
+}
 @keyframes growRose{
-0%{transform:scale(.6)}50%{transform:scale(1.1) rotate(8deg)}100%{transform:scale(1)}
+0%{transform:scale(.7)}50%{transform:scale(1.1) rotate(8deg)}100%{transform:scale(1)}
 }
 @keyframes finalBloom{
 0%{transform:scale(1.4)}50%{transform:scale(2.2) rotate(15deg)}100%{transform:scale(1.8)}
 }
-
 .instruction{opacity:.7;margin-top:20px;animation:blink 1.5s infinite}
 @keyframes blink{50%{opacity:.2}}
 
@@ -53,13 +48,11 @@ padding:30px;border-radius:40px;
 border:1px solid rgba(255,255,255,.1);
 box-shadow:0 0 50px rgba(255,0,60,.3);
 }
-
 @keyframes pulse{
 0%{box-shadow:0 0 30px rgba(255,0,60,.3)}
 50%{box-shadow:0 0 70px rgba(255,0,60,.9)}
 100%{box-shadow:0 0 30px rgba(255,0,60,.3)}
 }
-
 @keyframes shake{
 0%{transform:translateX(0)}
 25%{transform:translateX(6px)}
@@ -68,17 +61,14 @@ box-shadow:0 0 50px rgba(255,0,60,.3);
 100%{transform:translateX(0)}
 }
 
-/* PHOTOS */
 .float-img{
 position:absolute;bottom:-150px;width:90px;height:120px;
 object-fit:cover;border-radius:12px;border:2px solid #ff003c;
-opacity:0;
-animation:floatUp 10s linear forwards, photoFade 1s forwards;
+opacity:0;animation:floatUp 10s linear forwards, photoFade 1s forwards;
 }
 @keyframes floatUp{to{transform:translateY(-130vh) rotate(360deg)}}
 @keyframes photoFade{to{opacity:1;transform:scale(1.1)}}
 
-/* PETALS + CONFETTI */
 .petal{position:absolute;pointer-events:none;animation:burst 2s forwards}
 @keyframes burst{
 0%{transform:translate(0,0);opacity:1}
@@ -98,7 +88,7 @@ animation:floatUp 10s linear forwards, photoFade 1s forwards;
 <audio id="bgMusic" src="song.mp3" loop></audio>
 
 <div id="rose-stage" onclick="handleTap()">
-<div id="the-rose">🌱</div>
+<div id="the-rose">🌹</div>
 <p class="instruction">Tap to grow the rose (<span id="tap-count">5</span>)</p>
 </div>
 
@@ -111,8 +101,7 @@ animation:floatUp 10s linear forwards, photoFade 1s forwards;
 </div>
 
 <script>
-let taps=0;
-const totalTaps=5;
+let taps=0,totalTaps=5;
 const rose=document.getElementById("the-rose");
 const count=document.getElementById("tap-count");
 
@@ -123,23 +112,11 @@ if(navigator.vibrate) navigator.vibrate(40);
 
 rose.style.animation="growRose .5s";
 setTimeout(()=>rose.style.animation="",500);
-rose.style.transform=`scale(${0.6+(taps*0.25)})`;
-
-if(taps==2) rose.innerText="🥀";
-if(taps==3) rose.innerText="🌷";
-if(taps==4) rose.innerText="🌹";
+rose.style.transform=`scale(${0.7+(taps*0.25)})`;
 
 if(taps>=totalTaps){
 rose.style.animation="finalBloom 1s forwards";
-
-/* play music */
 document.getElementById("bgMusic").play().catch(()=>{});
-
-/* flash */
-const flash=document.getElementById("flash");
-flash.style.animation="flashAnim .8s";
-
-/* heart cursor */
 document.body.style.cursor="url('https://cur.cursors-4u.net/nature/nat-10/nat936.cur'), auto";
 
 setTimeout(()=>{
@@ -153,20 +130,11 @@ typeWriter();
 }
 
 function startCelebration(){
-const photos=['p1.jpeg','p2.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','p8.jpeg','p9.jpeg','p10.jpeg','p11.jpeg','p12.jpeg','p13.jpeg','p14.jpeg'];
 
-function createPhoto(){
-const img=document.createElement("img");
-img.src=photos[Math.floor(Math.random()*photos.length)];
-img.className="float-img";
-img.style.left=Math.random()*80+"vw";
-document.body.appendChild(img);
-setTimeout(()=>img.remove(),10000);
-}
-const interval=setInterval(createPhoto,1200);
-setTimeout(()=>clearInterval(interval),25000);
+/* flash */
+document.getElementById("flash").animate([{opacity:0},{opacity:.9},{opacity:0}],{duration:800});
 
-/* mega blast */
+/* blast */
 for(let i=0;i<120;i++){
 const p=document.createElement("div");
 p.className="petal";
@@ -178,7 +146,21 @@ document.body.appendChild(p);
 setTimeout(()=>p.remove(),2000);
 }
 
-/* falling petals rain */
+/* show p1 → p14 sequentially */
+const photos=['p1.jpeg','p2.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','p8.jpeg','p9.jpeg','p10.jpeg','p11.jpeg','p12.jpeg','p13.jpeg','p14.jpeg'];
+let i=0;
+const interval=setInterval(()=>{
+if(i>=photos.length){clearInterval(interval);return;}
+const img=document.createElement("img");
+img.src=photos[i];
+img.className="float-img";
+img.style.left=Math.random()*80+"vw";
+document.body.appendChild(img);
+setTimeout(()=>img.remove(),10000);
+i++;
+},1200);
+
+/* petals rain */
 setInterval(()=>{
 const p=document.createElement("div");
 p.className="fallPetal";
@@ -204,19 +186,11 @@ setTimeout(()=>c.remove(),6000);
 
 function typeWriter(){
 const text="Duniya ke har gulab ki apni kahani hai, par tum meri poori prem kahani ho. I love you ❤️🌹";
-let i=0;
-const box=document.getElementById("typewriter");
-
-function play(){
-if(i<text.length){
-box.textContent+=text.charAt(i);
-i++;
-setTimeout(play,60);
-}else{
-document.querySelector(".card").style.animation="pulse 1.2s infinite";
-}
-}
-play();
+let i=0,box=document.getElementById("typewriter");
+(function play(){
+if(i<text.length){box.textContent+=text[i++];setTimeout(play,60);}
+else document.querySelector(".card").style.animation="pulse 1.2s infinite";
+})();
 }
 </script>
 
